@@ -400,10 +400,16 @@
 .card-body-scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:5px;scrollbar-width:thin;scrollbar-color:#d2d2d7 transparent}
 .card-body-scroll::-webkit-scrollbar{width:5px}.card-body-scroll::-webkit-scrollbar-thumb{background:#d2d2d7;border-radius:9px}
 .card-header{flex-shrink:0}.card-bottom{flex-shrink:0;background:#fff;padding-top:8px}
+.cmd-name[title]{cursor:help;text-decoration:underline dotted #a7a7ad;text-underline-offset:5px}
 .options-list abbr{cursor:help;text-decoration:underline dotted #a7a7ad;text-underline-offset:3px}
 .example-box{max-height:none;white-space:pre-wrap}
 @media(max-width:680px){.card{height:610px;min-height:610px;max-height:610px}}
 
+        /* 로고의 기존 외형은 유지하고 클릭 가능 여부만 표시 */
+        .directory-reference-title{font-size:18px;font-weight:600;margin:30px 0 12px}
+        .directory-reference-table th:first-child,.directory-reference-table td:first-child{width:140px;white-space:nowrap}
+        .home-logo{cursor:pointer}
+        .home-logo:focus-visible{outline:2px solid var(--primary);outline-offset:5px;border-radius:5px}
     </style>
 </head>
 <body>
@@ -416,7 +422,7 @@
 
     <!-- Sticky Sub Nav -->
     <div class="sub-nav">
-        <h1>리눅스 명령어 사전</h1>
+        <h1 class="home-logo" role="link" tabindex="0" title="전체 명령어로 돌아가기 (새로고침)" onclick="window.location.reload()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.reload()}">리눅스 명령어 사전</h1>
         <div class="nav-actions">
             <button class="btn-secondary" onclick="openGitHubModal()">GitHub 갱신</button>
             <button class="btn-secondary" onclick="downloadUpdatedIndex()">나만의 사전으로 저장</button>
@@ -426,7 +432,7 @@
     </div>
 
     <div class="container">
-        <h2 class="hero-title">Linux Command Reference</h2>
+        <h2 class="hero-title home-logo" role="link" tabindex="0" title="전체 명령어로 돌아가기 (새로고침)" onclick="window.location.reload()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.reload()}">Linux Command Reference</h2>
         <p class="hero-subtitle" id="heroSubtitle">리눅스 명령어 · 핵심 옵션 · 문법 · 활용 예시를 한눈에</p>
 
         <!-- Search Bar -->
@@ -498,6 +504,19 @@
                     <tr><td class="flow-symbol">&amp;&gt;&gt;</td><td>표준 출력 + 에러(추가)</td><td>표준 출력과 표준 에러를 함께 덧붙이기</td><td><code>ls /tmp /없는경로 &amp;&gt;&gt; result.log</code></td></tr>
                 </tbody>
             </table>
+            <h4 class="directory-reference-title">📁 주요 리눅스 디렉터리 (경로)</h4>
+            <table class="flow-table directory-reference-table" aria-label="주요 리눅스 디렉터리 경로와 의미">
+                <thead><tr><th scope="col">디렉터리명 (경로)</th><th scope="col">의미</th></tr></thead>
+                <tbody>
+                    <tr><td class="flow-symbol">/</td><td>이름 없이 슬래시(/)로 표시하는 루트 디렉터리로, 모든 파일과 디렉터리의 최상위 경로</td></tr>
+                    <tr><td class="flow-symbol">/bin</td><td>기본 명령어 바이너리 파일이 저장된 디렉터리로, 일반 사용자가 사용할 수 있는 명령어들이 실행 파일 형태로 위치</td></tr>
+                    <tr><td class="flow-symbol">/dev</td><td>장치 파일이 저장된 디렉터리로 문자 장치 파일, 블록 장치 파일 등이 존재함. 예) 하드 디스크 장치 파일 → /dev/sda1</td></tr>
+                    <tr><td class="flow-symbol">/etc</td><td>시스템 설정 파일들이 저장된 디렉터리로 사용자 계정 정보, 문서 편집기 설정, 네트워크 설정 정보들이 존재하는 위치</td></tr>
+                    <tr><td class="flow-symbol">/home</td><td>사용자 홈 디렉터리들이 위치한 디렉터리로 각 사용자의 고유 서브 디렉터리가 존재. 예) 사용자 pi의 홈 디렉터리는 /home/pi</td></tr>
+                    <tr><td class="flow-symbol">/sbin</td><td>시스템 관리 명령어 바이너리 파일이 저장된 디렉터리로 root 사용자나 관리자가 주로 사용하는 명령어가 저장됨</td></tr>
+                    <tr><td class="flow-symbol">/var</td><td>가변 데이터 파일들이 저장되는 디렉터리로 로그 파일, 캐시 파일, 임시 파일(재부팅 시에도 존재) 등이 존재함</td></tr>
+                </tbody>
+            </table>
             </div>
         </div>
 
@@ -528,6 +547,11 @@
             <div class="form-group">
                 <label>명령어</label>
                 <input type="text" id="addCmd" class="form-control" placeholder="예: chmod">
+            </div>
+            <div class="form-group">
+                <label for="addCommandTooltip">명령어 마우스오버 약어 설명</label>
+                <input id="addCommandTooltip" class="form-control" placeholder="예: ls : list / 목록" aria-describedby="commandTooltipHelp">
+                <p id="commandTooltipHelp" style="color:#8e8e93;font-size:12px;line-height:1.6;margin-top:7px">입력 형식: 명령어 : 영어 / 뜻<br>예: pwd : print working directory / 현재 작업 디렉터리 출력<br>약어가 아닌 명령어는 (약어 X)로 표시할 수 있습니다.</p>
             </div>
             <div class="form-group">
                 <label>카테고리</label>
@@ -707,17 +731,45 @@ function optionTooltip(commandName,name,description,customMeanings){
  if(explicit)return `${explicit[1]} : ${explicit[2]} / ${({'read':'읽기','write':'쓰기','execute':'실행'})[explicit[2].toLowerCase()]||'약어 X'}`;
  return `${display} : (약어 X)`;
 }
+const commandMeanings={
+'pwd':['print working directory','현재 작업 디렉터리 출력'],
+'ls':['list','목록'], 'cd':['change directory','디렉터리 변경'],
+'mkdir':['make directory','디렉터리 만들기'], 'cp':['copy','복사'],
+'mv':['move','이동'], 'rm':['remove','제거'], 'rmdir':['remove directory','디렉터리 제거'],
+'cat':['concatenate','연결'], 'grep':['global regular expression print','정규표현식 전역 검색 및 출력'],
+'wc':['word count','단어 수 세기'], 'uniq':['unique','고유한'],
+'chmod':['change mode','권한 모드 변경'], 'chown':['change owner','소유자 변경'],
+'sudo':['superuser do','관리자 권한으로 실행'], 'ps':['process status','프로세스 상태'],
+'bg':['background','백그라운드'], 'fg':['foreground','포그라운드'],
+'uname':['Unix name','시스템 이름'], 'df':['disk free','디스크 여유 공간'],
+'du':['disk usage','디스크 사용량'], 'ip':['internet protocol','인터넷 프로토콜'],
+'ssh':['secure shell','보안 셸'], 'scp':['secure copy','보안 복사'],
+'ss':['socket statistics','소켓 통계'], 'tar':['tape archive','테이프 아카이브'],
+'dnf':['Dandified YUM','개선된 YUM 패키지 관리자'],
+'apt':['advanced package tool','고급 패키지 도구'],
+'pgrep':['process grep','프로세스 검색'],
+'printf':['print formatted','서식에 맞춰 출력'],
+'expr':['expression','표현식'], 'env / printenv':['environment / print environment','환경 / 환경변수 출력'],
+'vim':['vi improved','개선된 vi'], 'vi / vim':['visual editor / vi improved','시각적 편집기 / 개선된 vi']
+};
+function commandTooltip(d){
+ const raw=String(d.commandTooltip||'').trim();
+ if(raw)return raw;
+ const meaning=commandMeanings[String(d.name).trim().toLowerCase()];
+ return meaning?`${d.name} : ${meaning[0]} / ${meaning[1]}`:`${d.name} : (약어 X)`;
+}
 function displayExample(value){return String(value||'').split(/\r?\n/).map(line=>line.trim()?('$ '+line):'').join('\n')}
-function renderCards(){renderFilters();document.getElementById('heroSubtitle').textContent=`${commands.length}개 항목 · 명령어 검색 · 학습 상태 관리 · 암기 카드`;document.getElementById('allView').style.fontWeight=currentView==='all'?'700':'400';document.getElementById('favView').style.fontWeight=currentView==='favorites'?'700':'400';const p=profile(),q=document.getElementById('searchInput').value.trim().toLocaleLowerCase(),status=document.getElementById('statusFilter').value;const fav=new Set((p.favorites||[]).map(String));const filtered=commands.filter(d=>(currentCategory==='all'||d.cat===currentCategory)&&(currentView!=='favorites'||fav.has(String(d.id)))&&(status==='all'||(p.status[String(d.id)]||'unlearned')===status)&&(!q||searchable(d).includes(q)));const grid=document.getElementById('cardsGrid');grid.innerHTML='';if(!filtered.length){grid.innerHTML='<p class="empty-state">조건에 맞는 명령어가 없습니다. 검색어나 필터를 변경해 보세요.</p>';return}
-filtered.forEach(d=>{const el=document.createElement('article');el.className='card';el.id='command-'+String(d.id);const opts=(d.options||[]).map(o=>{const i=o.indexOf(':');return `<tr><td><abbr title="${esc(optionTooltip(d.name,i<0?o:o.slice(0,i),i<0?'':o.slice(i+1),d.optionTooltips))}">${esc(i<0?o:o.slice(0,i))}</abbr></td><td>${esc(i<0?'':o.slice(i+1))}</td></tr>`}).join('');const key=String(d.id),state=p.status[key]||'unlearned';el.innerHTML=`<div class="card-header"><span class="cmd-name">${esc(d.name)}</span><div style="display:flex;gap:6px;align-items:center"><button class="star-btn ${fav.has(key)?'on':''}" title="즐겨찾기" aria-label="즐겨찾기">${fav.has(key)?'★':'☆'}</button><span class="cat-tag">${esc(catMap[d.cat]||d.cat)}</span></div></div><div class="card-body-scroll"><div class="card-meta"><span class="meta-pill">키워드 · ${esc(d.keyword||'미입력')}</span></div><p class="cmd-desc">${esc(d.desc)}</p><div class="card-section-label">기본 문법</div><div class="syntax-box">${esc(d.syntax||d.name)}</div><div class="card-section-label">핵심 옵션</div><table class="options-list"><tbody>${opts||'<tr><td colspan="2">추가된 옵션이 없습니다.</td></tr>'}</tbody></table><div class="card-section-label">실행 예시</div><div class="example-box">${esc(displayExample(d.example||d.name))}</div><div class="card-section-label">활용 · 주의사항</div><div class="usage-note">${esc(d.usage||'활용 사례를 추가해 주세요.')}</div></div><div class="card-bottom"><div class="card-footer-meta"><span>수정: ${esc(d.updated||'초기 등록')} · 옵션 ${(d.options||[]).length}개</span><select class="status-select" aria-label="${esc(d.name)} 학습 상태"><option value="unlearned" ${state==='unlearned'?'selected':''}>미학습</option><option value="learning" ${state==='learning'?'selected':''}>학습 중</option><option value="done" ${state==='done'?'selected':''}>완료</option></select></div><div class="card-tools"><button class="mini-btn add-option">+ 옵션 추가</button><button class="mini-btn edit-command">수정</button><button class="mini-btn danger-btn delete-command">삭제</button></div></div>`;el.querySelector('.star-btn').onclick=()=>toggleFavorite(d.id);el.querySelector('.status-select').onchange=e=>setStatus(d.id,e.target.value);el.querySelector('.add-option').onclick=()=>addOption(d.id);el.querySelector('.edit-command').onclick=()=>editCommand(d.id);el.querySelector('.delete-command').onclick=()=>deleteCommand(d.id);grid.appendChild(el)})}
+function renderCards(){renderFilters();document.getElementById('heroSubtitle').textContent='리눅스 명령어 사전';document.getElementById('allView').style.fontWeight=currentView==='all'?'700':'400';document.getElementById('favView').style.fontWeight=currentView==='favorites'?'700':'400';const p=profile(),q=document.getElementById('searchInput').value.trim().toLocaleLowerCase(),status=document.getElementById('statusFilter').value;const fav=new Set((p.favorites||[]).map(String));const filtered=commands.filter(d=>(currentCategory==='all'||d.cat===currentCategory)&&(currentView!=='favorites'||fav.has(String(d.id)))&&(status==='all'||(p.status[String(d.id)]||'unlearned')===status)&&(!q||searchable(d).includes(q)));if(currentCategory==='all' && currentView==='all' && !q){filtered.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'en',{sensitivity:'base',numeric:true}));}const grid=document.getElementById('cardsGrid');grid.innerHTML='';if(!filtered.length){grid.innerHTML='<p class="empty-state">조건에 맞는 명령어가 없습니다. 검색어나 필터를 변경해 보세요.</p>';return}
+filtered.forEach(d=>{const el=document.createElement('article');el.className='card';el.id='command-'+String(d.id);const opts=(d.options||[]).map(o=>{const i=o.indexOf(':');return `<tr><td><abbr title="${esc(optionTooltip(d.name,i<0?o:o.slice(0,i),i<0?'':o.slice(i+1),d.optionTooltips))}">${esc(i<0?o:o.slice(0,i))}</abbr></td><td>${esc(i<0?'':o.slice(i+1))}</td></tr>`}).join('');const key=String(d.id),state=p.status[key]||'unlearned';el.innerHTML=`<div class="card-header"><span class="cmd-name" title="${esc(commandTooltip(d))}" tabindex="0" aria-label="${esc(commandTooltip(d))}">${esc(d.name)}</span><div style="display:flex;gap:6px;align-items:center"><button class="star-btn ${fav.has(key)?'on':''}" title="즐겨찾기" aria-label="즐겨찾기">${fav.has(key)?'★':'☆'}</button><span class="cat-tag">${esc(catMap[d.cat]||d.cat)}</span></div></div><div class="card-body-scroll"><div class="card-meta"><span class="meta-pill">키워드 · ${esc(d.keyword||'미입력')}</span></div><p class="cmd-desc">${esc(d.desc)}</p><div class="card-section-label">기본 문법</div><div class="syntax-box">${esc(d.syntax||d.name)}</div><div class="card-section-label">핵심 옵션</div><table class="options-list"><tbody>${opts||'<tr><td colspan="2">추가된 옵션이 없습니다.</td></tr>'}</tbody></table><div class="card-section-label">실행 예시</div><div class="example-box">${esc(displayExample(d.example||d.name))}</div><div class="card-section-label">활용 · 주의사항</div><div class="usage-note">${esc(d.usage||'활용 사례를 추가해 주세요.')}</div></div><div class="card-bottom"><div class="card-footer-meta"><span>수정: ${esc(d.updated||'초기 등록')} · 옵션 ${(d.options||[]).length}개</span><select class="status-select" aria-label="${esc(d.name)} 학습 상태"><option value="unlearned" ${state==='unlearned'?'selected':''}>미학습</option><option value="learning" ${state==='learning'?'selected':''}>학습 중</option><option value="done" ${state==='done'?'selected':''}>완료</option></select></div><div class="card-tools"><button class="mini-btn add-option">+ 옵션 추가</button><button class="mini-btn edit-command">수정</button><button class="mini-btn danger-btn delete-command">삭제</button></div></div>`;el.querySelector('.star-btn').onclick=()=>toggleFavorite(d.id);el.querySelector('.status-select').onchange=e=>setStatus(d.id,e.target.value);el.querySelector('.add-option').onclick=()=>addOption(d.id);el.querySelector('.edit-command').onclick=()=>editCommand(d.id);el.querySelector('.delete-command').onclick=()=>deleteCommand(d.id);grid.appendChild(el)})}
 function addOption(id){editCommand(id);document.getElementById('addOptions').focus();const field=document.getElementById('addOptions');field.setSelectionRange(field.value.length,field.value.length)}
 function deleteCommand(id){const d=commands.find(x=>String(x.id)===String(id));if(!d||!confirm(`'${d.name}' 항목을 삭제할까요?\n삭제하면 현재 브라우저의 사전에서 제외됩니다.`))return;commands=commands.filter(x=>String(x.id)!==String(id));deletedIds.add(String(id));store('sys_linux_deleted_v6',[...deletedIds]);saveCommands();renderCards()}
 const editorFields={name:'addCmd',cat:'addCat',desc:'addDesc',keyword:'addKeyword',syntax:'addSyntax',usage:'addUsage',example:'addExample',options:'addOptions'};
-function openAddModal(){editingId=null;document.getElementById('editorTitle').textContent='새 명령어 추가';for(const field of Object.values(editorFields))document.getElementById(field).value='';document.getElementById('addOptionTooltips').value='';openModal('addModal')}
-function editCommand(id){const d=commands.find(x=>String(x.id)===String(id));if(!d)return;editingId=id;document.getElementById('editorTitle').textContent=`${d.name} 명령어 수정`;for(const [key,field] of Object.entries(editorFields))document.getElementById(field).value=key==='options'?(d.options||[]).join('\n'):d[key]||'';document.getElementById('addOptionTooltips').value=Object.entries(d.optionTooltips||{}).map(([key,value])=>`${key} : ${value[0]} / ${value[1]}`).join('\n');openModal('addModal')}
+function openAddModal(){editingId=null;document.getElementById('editorTitle').textContent='새 명령어 추가';for(const field of Object.values(editorFields))document.getElementById(field).value='';document.getElementById('addOptionTooltips').value='';document.getElementById('addCommandTooltip').value='';openModal('addModal')}
+function editCommand(id){const d=commands.find(x=>String(x.id)===String(id));if(!d)return;editingId=id;document.getElementById('editorTitle').textContent=`${d.name} 명령어 수정`;for(const [key,field] of Object.entries(editorFields))document.getElementById(field).value=key==='options'?(d.options||[]).join('\n'):d[key]||'';document.getElementById('addCommandTooltip').value=d.commandTooltip||'';document.getElementById('addOptionTooltips').value=Object.entries(d.optionTooltips||{}).map(([key,value])=>`${key} : ${value[0]} / ${value[1]}`).join('\n');openModal('addModal')}
 function saveNewCommand(){const read=k=>document.getElementById(editorFields[k]).value.trim();if(!read('name')||!read('desc')){alert('명령어 이름과 설명은 필수입니다.');return}const tooltipLines=document.getElementById('addOptionTooltips').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
 const optionTooltips={};for(const line of tooltipLines){const match=line.match(/^(.+?)\s*:\s*([^/]+?)\s*\/\s*(.+)$/);if(!match){alert('약어 설명 형식을 확인해 주세요.\n예: -n : number / 숫자\n\n잘못된 줄: '+line);return}const key=match[1].trim();if(!key||!match[2].trim()||!match[3].trim()){alert('약어, 영어, 한글 뜻을 모두 입력해 주세요.');return}optionTooltips[key]=[match[2].trim(),match[3].trim()]}
-const data={name:read('name'),cat:read('cat'),desc:read('desc'),keyword:read('keyword'),syntax:read('syntax'),usage:read('usage'),example:read('example'),options:read('options').split('\n').map(x=>x.trim()).filter(Boolean),optionTooltips,updated:new Date().toLocaleDateString('ko-KR')};if(editingId!==null){const i=commands.findIndex(d=>String(d.id)===String(editingId));if(i>=0)commands[i]={...commands[i],...data}}else{commands.unshift({id:'custom-'+Date.now(),...data})}saveCommands();closeModal('addModal');renderCards()}
+const commandTooltipInput=document.getElementById('addCommandTooltip').value.trim();if(commandTooltipInput && !/^.+?\s*:\s*[^/]+?\s*\/\s*.+$/.test(commandTooltipInput) && !/^.+?\s*:\s*\(약어 X\)$/.test(commandTooltipInput)){alert('명령어 약어 설명 형식을 확인해 주세요.\n예: ls : list / 목록');return}
+const data={commandTooltip:commandTooltipInput,name:read('name'),cat:read('cat'),desc:read('desc'),keyword:read('keyword'),syntax:read('syntax'),usage:read('usage'),example:read('example'),options:read('options').split('\n').map(x=>x.trim()).filter(Boolean),optionTooltips,updated:new Date().toLocaleDateString('ko-KR')};if(editingId!==null){const i=commands.findIndex(d=>String(d.id)===String(editingId));if(i>=0)commands[i]={...commands[i],...data}}else{commands.unshift({id:'custom-'+Date.now(),...data})}saveCommands();closeModal('addModal');renderCards()}
 function openModal(id){document.getElementById(id).style.display='flex'}function closeModal(id){document.getElementById(id).style.display='none'}function openRoleModal(){openModal('roleModal')}
 function openQuiz(){const cats=document.getElementById('quizCategory');cats.innerHTML=[['all','전체 카테고리'],...allCategories().map(c=>[c,catMap[c]])].map(([id,label])=>`<option value="${esc(id)}">${esc(label)}</option>`).join('');document.getElementById('quizScope').value='all';resetQuiz();openModal('quizModal')}
 function resetQuiz(){const cat=document.getElementById('quizCategory').value,scope=document.getElementById('quizScope').value,p=profile(),fav=new Set((p.favorites||[]).map(String));quizList=commands.filter(d=>(cat==='all'||d.cat===cat)&&(scope==='all'||(scope==='favorites'?fav.has(String(d.id)):(p.status[String(d.id)]||'unlearned')===scope))).map(d=>d.id);quizIndex=0;quizRevealed=false;renderQuiz()}
